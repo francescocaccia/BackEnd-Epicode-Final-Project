@@ -1,4 +1,4 @@
-package main.Enums;
+package main.enums;
 
 public enum Role {
 
