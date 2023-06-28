@@ -18,9 +18,9 @@ public class CardImmagini {
     @Column
     private byte[] immagine1;
 
-    @Column
+    @Column(nullable = true)
     private byte[] immagine2;
 
-    @Column
+    @Column(nullable = true)
     private byte[] immagine3;
 }

@@ -22,6 +22,8 @@ public class Luogo {
 
     @Column
     private String indirizzo;
+    @Column
+    private String numeroCivico;
 
     @OneToOne
     @JoinColumn(name = "idRistorante")

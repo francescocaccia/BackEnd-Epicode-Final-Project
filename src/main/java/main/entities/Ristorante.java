@@ -17,14 +17,17 @@ public class Ristorante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idRistorante;
 
-    @Column
+    @Column(nullable = false)
+    private String nomeRistorante;
+
+    @Column(nullable = false)
     private int totaleCoperti;
 
     @OneToMany
     @JoinColumn(name = "idRecensione")
     private List<Recensione> recensione;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoCucina tipoCucina;
 
