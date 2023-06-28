@@ -7,9 +7,9 @@ import lombok.Data;
 public class CardImmaginiPayload {
 
     @NotNull(message = "è obbligatorio inserire almeno un immagine")
-    private byte[] immagine1;
+    private String immagine1;
 
-    private byte[] immagine2;
+    private String immagine2;
 
-    private byte[] immagine3;
+    private String immagine3;
 }

@@ -21,8 +21,8 @@ public class RistorantePayload {
     @NotNull(message = "il luogo è obbligatorio")
     private LuogoPayload luogo;
 
-
-    private CardImmagini cardImmagini;
+    @NotNull(message = "almeno un'immagine è obbligatoria")
+    private CardImmaginiPayload cardImmagini;
 
 
 }

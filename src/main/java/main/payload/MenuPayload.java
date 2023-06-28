@@ -8,6 +8,5 @@ import java.util.List;
 @Data
 public class MenuPayload {
 
-
     private List<PiattoPayload> piatti;
 }

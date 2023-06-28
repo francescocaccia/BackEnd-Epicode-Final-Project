@@ -13,4 +13,6 @@ public class PiattoPayload {
 
     @NotNull(message = "il prezzo è obbligatorio")
     private Double prezzo;
+
+    
 }

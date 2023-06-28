@@ -15,12 +15,12 @@ public class CardImmagini {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCard;
 
+    @Column(nullable = false)
+    private String immagine1;
+
     @Column
-    private byte[] immagine1;
+    private String immagine2;
 
-    @Column(nullable = true)
-    private byte[] immagine2;
-
-    @Column(nullable = true)
-    private byte[] immagine3;
+    @Column
+    private String immagine3;
 }
