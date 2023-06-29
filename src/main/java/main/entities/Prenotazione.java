@@ -31,4 +31,8 @@ public class Prenotazione {
     private Ristorante ristorante;
 
 
+    public Prenotazione(Cliente cliente, Ristorante ristorante, Date date, int numeroPersone) {
+    }
+
+
 }
