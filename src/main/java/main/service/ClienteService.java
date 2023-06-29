@@ -15,7 +15,7 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
 
-    public void creaCliente(ClientePayload clientePayload) {
+    public Cliente creaCliente(ClientePayload clientePayload) {
 
         Optional<Cliente> cliente = clienteRepository.findByEmail(clientePayload.getEmail());
 
@@ -34,6 +34,7 @@ public class ClienteService {
         clienteRepository.save(cliente1);
 
 
+        return cliente1;
     }
 
 
@@ -80,5 +81,17 @@ public class ClienteService {
 
     }
 
+    public Cliente findByEmail(String email) {
 
+        Optional<Cliente> cliente = clienteRepository.findByEmail(email);
+        if (cliente.isPresent()) {
+            return cliente.get();
+        } else {
+            throw new RuntimeException("utente non trovato");
+        }
+
+    }
 }
+
+
+

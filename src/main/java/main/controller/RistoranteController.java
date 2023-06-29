@@ -37,7 +37,6 @@ public class RistoranteController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // implementa get by id
 
     @GetMapping("/{id}")
     public ResponseEntity<Ristorante> getById(@PathVariable("id") Long id) {
@@ -51,8 +50,6 @@ public class RistoranteController {
         return ResponseEntity.ok(ristorante);
     }
 
-
-    // implementa get by tipo cucina
 
     @GetMapping("/tipo-cucina")
     public ResponseEntity<List<Ristorante>> getByTipoCucina(@RequestParam("tipoCucina") TipoCucina tipoCucina) {
