@@ -12,4 +12,9 @@ public class CardImmaginiPayload {
     private String immagine2;
 
     private String immagine3;
+
+    public CardImmaginiPayload(String immagine1) {
+        this.immagine1 = immagine1;
+    }
+
 }

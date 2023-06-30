@@ -30,12 +30,12 @@ public class SecurityConfig {
 
         http.csrf(c -> c.disable());
 
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristornati/**").permitAll());
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/").permitAll());
 
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/**").authenticated());
-
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/prenotazione/**").authenticated());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/").permitAll());
 
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

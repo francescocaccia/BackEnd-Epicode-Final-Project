@@ -63,7 +63,24 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return new AntPathMatcher().match("/auth/**", request.getServletPath());
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        String servletPath = request.getServletPath();
+
+        // Specifica gli endpoint liberi che non richiedono autenticazione
+        String[] freeEndpoints = {
+                "/auth/**",
+                "/ristoranti/**" // Aggiungi qui altri endpoint liberi se necessario
+        };
+
+        // Controlla se il servletPath corrisponde a uno degli endpoint liberi
+        for (String endpoint : freeEndpoints) {
+            if (pathMatcher.match(endpoint, servletPath)) {
+                return true; // Non filtrare la richiesta per gli endpoint liberi
+            }
+        }
+
+        return false; // Filtra la richiesta per gli altri endpoint
     }
+
 
 }
