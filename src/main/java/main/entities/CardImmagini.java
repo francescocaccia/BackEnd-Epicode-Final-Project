@@ -23,4 +23,8 @@ public class CardImmagini {
 
     @Column
     private String immagine3;
+
+    @OneToOne
+    @JoinColumn(name = "idRistorante")
+    private Ristorante ristorante;
 }

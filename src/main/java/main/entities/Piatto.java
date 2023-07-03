@@ -7,16 +7,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "menu")
+@Table(name = "piatto")
 public class Piatto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPiatto;
+    private Long id;
 
     @Column
     private String nomePiatto;
 
     @Column
     private Double prezzo;
+
+    @ManyToOne
+    @JoinColumn(name = "id_menu")
+    private Menu menu;
 }

@@ -1,6 +1,8 @@
 package main.service;
 
+import lombok.extern.slf4j.Slf4j;
 import main.entities.Cliente;
+import main.exception.ClienteAlreadyPresentException;
 import main.payload.ClientePayload;
 import main.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ClienteService {
 
@@ -17,10 +20,13 @@ public class ClienteService {
 
     public Cliente creaCliente(ClientePayload clientePayload) {
 
+        log.info("Provo ad aggiungere il cliente {}", clientePayload);
+
         Optional<Cliente> cliente = clienteRepository.findByEmail(clientePayload.getEmail());
 
         if (cliente.isPresent()) {
-            throw new RuntimeException("Esiste già un Cliente con la stessa e-mail");
+            log.error("Errore nell'aggiunta del cliente, email {} già presente", clientePayload.getEmail());
+            throw new ClienteAlreadyPresentException();
         }
         Cliente cliente1 = new Cliente();
         cliente1.setNome(clientePayload.getNome());
@@ -33,6 +39,7 @@ public class ClienteService {
 
         clienteRepository.save(cliente1);
 
+        log.info("Cliente aggiunto con successo");
 
         return cliente1;
     }

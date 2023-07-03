@@ -14,9 +14,9 @@ public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idMenu;
+    private Long id;
 
     @OneToMany
-    @JoinColumn(name = "idPiatto")
+   @JoinColumn(name = "id_piatto")
     private List<Piatto> piatti;
 }

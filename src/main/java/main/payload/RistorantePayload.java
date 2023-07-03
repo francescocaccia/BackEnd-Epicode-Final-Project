@@ -1,6 +1,7 @@
 package main.payload;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import main.entities.CardImmagini;
@@ -11,6 +12,9 @@ public class RistorantePayload {
 
     @Min(value = 5)
     private int totaleCoperti;
+
+    @NotBlank
+    private String nomeRistorante;
 
     @NotNull(message = "il tipo di cucina è obbligatorio")
     private TipoCucina tipoCucina;
@@ -23,6 +27,5 @@ public class RistorantePayload {
 
     @NotNull(message = "almeno un'immagine è obbligatoria")
     private CardImmaginiPayload cardImmagini;
-
 
 }

@@ -7,8 +7,7 @@ import main.payload.CardImmaginiPayload;
 import main.payload.LuogoPayload;
 import main.payload.PiattoPayload;
 import main.payload.RistorantePayload;
-import main.repository.LuogoRepository;
-import main.repository.RistoranteRepository;
+import main.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +23,12 @@ public class RistoranteService {
     private RistoranteRepository ristoranteRepository;
     @Autowired
     private LuogoRepository luogoRepository;
+    @Autowired
+    private CardImmaginiRepository cardImmaginiRepository;
+    @Autowired
+    private MenuRepository menuRepository;
+    @Autowired
+    private PiattoRepository piattoRepository;
 
     public void inserisciRistorante(RistorantePayload ristorantePayload) {
         // Verifica se esiste già un ristorante con lo stesso luogo
@@ -37,6 +42,7 @@ public class RistoranteService {
 
 
         Ristorante ristorante = new Ristorante();
+        ristorante.setNomeRistorante(ristorantePayload.getNomeRistorante());
         ristorante.setTotaleCoperti(ristorantePayload.getTotaleCoperti());
         ristorante.setTipoCucina(ristorantePayload.getTipoCucina());
 
@@ -48,10 +54,13 @@ public class RistoranteService {
             Piatto piatto = new Piatto();
             piatto.setNomePiatto(piattoPayload.getNomePiatto());
             piatto.setPrezzo(piattoPayload.getPrezzo());
+            piattoRepository.save(piatto);
             piattoEntityList.add(piatto);
         });
 
         nuovoMenu.setPiatti(piattoEntityList);
+
+        menuRepository.save(nuovoMenu);
 
         ristorante.setMenu(nuovoMenu);
 
@@ -61,11 +70,15 @@ public class RistoranteService {
         nuovoLuogo.setIndirizzo(luogoPayload.getIndirizzo());
         ristorante.setLuogo(nuovoLuogo);
 
+        luogoRepository.save(nuovoLuogo);
+
         CardImmaginiPayload cardImmaginiPayload = ristorantePayload.getCardImmagini();
         CardImmagini cardImmagini = new CardImmagini();
         cardImmagini.setImmagine1(cardImmaginiPayload.getImmagine1());
         cardImmagini.setImmagine2(cardImmaginiPayload.getImmagine2());
         cardImmagini.setImmagine3(cardImmaginiPayload.getImmagine3());
+
+        cardImmaginiRepository.save(cardImmagini);
 
         ristorante.setCardImmagini(cardImmagini);
 
