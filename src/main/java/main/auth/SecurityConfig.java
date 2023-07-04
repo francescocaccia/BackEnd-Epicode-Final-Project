@@ -36,7 +36,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/prenotazione/**").authenticated());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/").permitAll());
-
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/tipoCucina/**").permitAll());
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(corsFilter, JWTAuthFilter.class);
