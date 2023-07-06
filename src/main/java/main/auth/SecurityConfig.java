@@ -30,13 +30,15 @@ public class SecurityConfig {
 
         http.csrf(c -> c.disable());
 
-
+        //http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/all").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/luogo/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/tipoCucina/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/**").authenticated());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/prenotazione/**").authenticated());
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/**").permitAll());
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/").permitAll());
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/tipoCucina/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/**").authenticated());
+
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(corsFilter, JWTAuthFilter.class);

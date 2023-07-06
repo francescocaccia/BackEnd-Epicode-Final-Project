@@ -3,6 +3,7 @@ package main.service;
 import lombok.extern.slf4j.Slf4j;
 import main.entities.Cliente;
 import main.exception.ClienteAlreadyPresentException;
+import main.exception.ClienteNotFoundException;
 import main.payload.ClientePayload;
 import main.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,16 +89,26 @@ public class ClienteService {
 
     }
 
-    public Cliente findByEmail(String email) {
+//    public Cliente findByEmail(String email) {
+//
+//        Optional<Cliente> cliente = clienteRepository.findByEmail(email);
+//        if (cliente.isPresent()) {
+//            return cliente.get();
+//        } else {
+//            throw new RuntimeException("utente non trovato");
+//        }
+//
+//    }
 
+    public Cliente findByEmail(String email) {
         Optional<Cliente> cliente = clienteRepository.findByEmail(email);
         if (cliente.isPresent()) {
             return cliente.get();
         } else {
-            throw new RuntimeException("utente non trovato");
+            throw new ClienteNotFoundException("Cliente non trovato per l'email: " + email);
         }
-
     }
+
 }
 
 

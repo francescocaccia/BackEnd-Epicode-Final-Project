@@ -69,7 +69,9 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         // Specifica gli endpoint liberi che non richiedono autenticazione
         String[] freeEndpoints = {
                 "/auth/**",
-                "/ristoranti/**" // Aggiungi qui altri endpoint liberi se necessario
+                "/luogo/**",
+               // "/ristoranti/**",
+              // Aggiungi qui altri endpoint liberi se necessario
         };
 
         // Controlla se il servletPath corrisponde a uno degli endpoint liberi

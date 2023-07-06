@@ -1,6 +1,7 @@
 package main.service;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import main.entities.*;
 import main.enums.TipoCucina;
 import main.payload.CardImmaginiPayload;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Data
 @Service
+@Slf4j
 public class RistoranteService {
 
     @Autowired
@@ -83,6 +85,7 @@ public class RistoranteService {
         ristorante.setCardImmagini(cardImmagini);
 
         ristoranteRepository.save(ristorante);
+        log.info("ristorante inserito correttamente" + ristorante);
     }
 
 
@@ -106,6 +109,27 @@ public class RistoranteService {
     }
 
 
+
+//    public List<Ristorante> searchRestaurants(String citta, String restaurantName) {
+//        if (citta != null && restaurantName != null) {
+//            // Ricerca per entrambi i criteri: city e restaurantName
+//            return ristoranteRepository.findByLuogoAndNomeRistorante(citta, restaurantName);
+//        } else if (citta != null) {
+//            // Ricerca per city
+//            return ristoranteRepository.findByLuogo(Luogo citta);
+//        } else if (restaurantName != null) {
+//            // Ricerca per restaurantName
+//            return (List<Ristorante>) ristoranteRepository.findByNomeRistorante(restaurantName);
+//        } else {
+//            // Nessun criterio di ricerca specificato, restituisce tutti i ristoranti
+//            return ristoranteRepository.findAll();
+//        }
+//    }
 }
+
+//    public List<Ristorante> getByCityAndName(String city, String name) {
+//        return ristoranteRepository.findByLuogoCittaAndNomeRistoranteContainingIgnoreCase(city, name);
+//    }
+
 
 

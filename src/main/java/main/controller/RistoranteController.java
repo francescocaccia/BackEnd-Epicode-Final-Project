@@ -61,6 +61,19 @@ public class RistoranteController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+//    @GetMapping("/restaurants")
+//    public ResponseEntity<List<Ristorante>> searchRestaurants(@RequestParam(value = "citta", required = false) String city,
+//                                                              @RequestParam(value = "nomeRistornate", required = false) String restaurantName) {
+//        List<Ristorante> response = ristoranteService.searchRestaurants(city, restaurantName);
+//
+//        if (response.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
 
-}
+
+    }
+

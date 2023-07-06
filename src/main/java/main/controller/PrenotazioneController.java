@@ -1,5 +1,6 @@
 package main.controller;
 
+import main.repository.RistoranteRepository;
 import main.service.PrenotazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,12 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping
+@RequestMapping("/prenotazione")
 public class PrenotazioneController {
 
     @Autowired
     private PrenotazioneService prenotazioneService;
 
+    @Autowired
+    private RistoranteRepository ristoranteRepository;
 
     @PostMapping("/prenota/{clienteId}/{ristoranteId}")
     public ResponseEntity<String> prenotaRistorante(@PathVariable("clienteId") Long clienteId, @PathVariable("ristoranteId") Long ristoranteId, @RequestParam("numeroPersone") int numeroPersone, @RequestParam("data") @DateTimeFormat(pattern = "dd-MM-yyyy") Date data) {
