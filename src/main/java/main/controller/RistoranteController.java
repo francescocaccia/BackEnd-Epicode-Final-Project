@@ -51,8 +51,8 @@ public class RistoranteController {
     }
 
 
-    @GetMapping("/tipo-cucina")
-    public ResponseEntity<List<Ristorante>> getByTipoCucina(@RequestParam("tipoCucina") TipoCucina tipoCucina) {
+    @GetMapping("/tipo-cucina/{tipoCucina}")
+    public ResponseEntity<List<Ristorante>> getByTipoCucina(@PathVariable("tipoCucina") TipoCucina tipoCucina) {
         List<Ristorante> response = ristoranteService.getByTipoCucina(tipoCucina);
 
         if (response.isEmpty()) {
@@ -61,11 +61,36 @@ public class RistoranteController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+    @GetMapping("/nome/{nomeRistorante}")
+    public ResponseEntity<List<Ristorante>> getRistoranteByNomeRistorante(@PathVariable String nomeRistorante) {
+        List<Ristorante> ristorante = ristoranteService.findRistoranteByNomeRistorante(nomeRistorante);
+        if (ristorante != null) {
+            return ResponseEntity.ok(ristorante);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/cerca")
+    public ResponseEntity<List<Ristorante>> searchRestaurants(@RequestParam(value = "perStringa") String value) {
+        List<Ristorante> ristorantes = ristoranteService.searchByTipoCucinaOrNomeRistorante(value);
+        return new ResponseEntity<>(ristorantes, HttpStatus.OK);
+    }
+
+    @GetMapping("/luogo/citta/{citta}")
+    public ResponseEntity<List<Ristorante>> getRistoranteByCitta(@PathVariable String citta){
+        List<Ristorante> ristoranti = ristoranteService.findByLuogo(citta);
+        return ResponseEntity.ok(ristoranti);
+    }
+
+
+
 //    @GetMapping("/restaurants")
 //    public ResponseEntity<List<Ristorante>> searchRestaurants(@RequestParam(value = "citta", required = false) String city,
 //                                                              @RequestParam(value = "nomeRistornate", required = false) String restaurantName) {
 //        List<Ristorante> response = ristoranteService.searchRestaurants(city, restaurantName);
-//
 //        if (response.isEmpty()) {
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //        }
@@ -73,7 +98,5 @@ public class RistoranteController {
 //        return new ResponseEntity<>(response, HttpStatus.OK);
 //    }
 
-
-
-    }
+}
 

@@ -41,16 +41,14 @@ public class AuthController {
             throws NotFoundException {
 
         Cliente user = clienteService.findByEmail(body.getEmail());
-
         String plainPW = body.getPassword();
         String hashedPW = user.getPassword();
-
         if (!bcrypt.matches(plainPW, hashedPW))
             throw new UnauthorizedException("Credenziali non valide!");
 
         String token = JWTTools.createToken(user);
 
-        return new ResponseEntity<>(new AuthenticationSuccessfullPayload(token), HttpStatus.OK);
+        return new ResponseEntity<>(new AuthenticationSuccessfullPayload(user.getNome(), token),HttpStatus.OK);
     }
 
 }

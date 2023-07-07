@@ -30,14 +30,21 @@ public class SecurityConfig {
 
         http.csrf(c -> c.disable());
 
-        //http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/all").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/cerca/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/luogo/**").permitAll());
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/tipoCucina/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/tipo-cucina/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/luogo/citta/{citta}").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/luogo/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("ristoranti/luogo/citta/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/nome/{nomeRistorante}").permitAll());//testato,senza questo non funziona
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/tipoCucina/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
+//        AUTORIZZAZIONE+++++++++++
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/**").authenticated());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/prenotazione/**").authenticated());
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/**").authenticated());
+//       http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/**").authenticated());
 
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

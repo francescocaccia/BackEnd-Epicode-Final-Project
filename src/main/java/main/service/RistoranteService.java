@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,6 +110,33 @@ public class RistoranteService {
     }
 
 
+    public List<Ristorante> findRistoranteByNomeRistorante(String nomeRistorante) {
+        return ristoranteRepository.findByNomeRistoranteStartingWithIgnoreCase(nomeRistorante);
+    }
+
+    public List<Ristorante> findRistorantiByTipoCucina(TipoCucina tipoCucina) {
+        return ristoranteRepository.findByTipoCucina(tipoCucina);
+    }
+
+    public List<Ristorante> findByLuogo(String luogoNome) {
+        return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCase(luogoNome);
+    }
+
+
+    public List<Ristorante> searchByTipoCucinaOrNomeRistorante(String value) {
+        TipoCucina[] allPossibleTipoCucina = TipoCucina.values();
+        boolean anyMatch = Arrays.stream(allPossibleTipoCucina)
+                .anyMatch(tipoCucina -> tipoCucina.name().equalsIgnoreCase(value));
+        if (anyMatch) {
+            return ristoranteRepository.findByTipoCucina(TipoCucina.valueOf(value));
+        } else {
+            Optional<Ristorante> ristoranteOptional = ristoranteRepository.findByNomeRistorante(value);
+            if (ristoranteOptional.isPresent()) {
+                return List.of(ristoranteOptional.get());
+            }
+        }
+        return new ArrayList<>();
+    }
 
 //    public List<Ristorante> searchRestaurants(String citta, String restaurantName) {
 //        if (citta != null && restaurantName != null) {
@@ -116,7 +144,7 @@ public class RistoranteService {
 //            return ristoranteRepository.findByLuogoAndNomeRistorante(citta, restaurantName);
 //        } else if (citta != null) {
 //            // Ricerca per city
-//            return ristoranteRepository.findByLuogo(Luogo citta);
+//            return ristoranteRepository.findByLuogoAndNomeRistorante( citta, "");
 //        } else if (restaurantName != null) {
 //            // Ricerca per restaurantName
 //            return (List<Ristorante>) ristoranteRepository.findByNomeRistorante(restaurantName);
@@ -125,11 +153,11 @@ public class RistoranteService {
 //            return ristoranteRepository.findAll();
 //        }
 //    }
-}
+//}
 
 //    public List<Ristorante> getByCityAndName(String city, String name) {
 //        return ristoranteRepository.findByLuogoCittaAndNomeRistoranteContainingIgnoreCase(city, name);
 //    }
 
 
-
+}
