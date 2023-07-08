@@ -72,14 +72,16 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                 "ristoranti/**",
                 "/auth/**",
                 "/luogo/**",
+                "/ristoranti/citta/complete/**",
                 "/luogo/citta/**",
                 "/ristoranti/tipo-cucina/**",
+                "/ristoranti?citta=NomeCitta&tipoCucina=italiana/**",
                 "/ristoranti/luogo/citta/**",
                 "/ristoranti/nome/**",
                 "/ristoranti/tipoCucina/**",
                 "/ristoranti/luogo/**",
                 "ristoranti/luogo/citta/**",
-                // "/ristoranti/**",
+
                 // Aggiungi qui altri endpoint liberi se necessario
         };
 

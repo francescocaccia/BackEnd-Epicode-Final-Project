@@ -1,5 +1,6 @@
 package main.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,4 +49,8 @@ public class Ristorante {
     @OneToOne
     @JoinColumn(name = "idCard")
     private CardImmagini cardImmagini;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "proprietario")
+    private Cliente proprietario;
 }

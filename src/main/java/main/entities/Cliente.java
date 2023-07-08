@@ -1,5 +1,6 @@
 package main.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@JsonIgnoreProperties({ "ristoranteDiProprietario"})
 @Entity
 @Table(name = "cliente")
 public class Cliente implements UserDetails {
@@ -42,13 +44,18 @@ public class Cliente implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "idRecensione")
     private List<Recensione> recensioni;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "idPrenotazione")
     private List<Prenotazione> prenotazioni;
+
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ristorante di proprietario")
+    private Ristorante ristoranteDiProprietario;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

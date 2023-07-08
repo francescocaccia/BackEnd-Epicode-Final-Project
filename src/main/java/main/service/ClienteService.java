@@ -89,16 +89,6 @@ public class ClienteService {
 
     }
 
-//    public Cliente findByEmail(String email) {
-//
-//        Optional<Cliente> cliente = clienteRepository.findByEmail(email);
-//        if (cliente.isPresent()) {
-//            return cliente.get();
-//        } else {
-//            throw new RuntimeException("utente non trovato");
-//        }
-//
-//    }
 
     public Cliente findByEmail(String email) {
         Optional<Cliente> cliente = clienteRepository.findByEmail(email);

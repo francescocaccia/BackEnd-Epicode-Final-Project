@@ -24,8 +24,8 @@ public class ClienteController {
 //    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public Cliente getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        return clienteService.findByEmail(email);
+        Cliente clienteLoggato = (Cliente) authentication.getPrincipal();
+        return  clienteLoggato;
     }
 
 

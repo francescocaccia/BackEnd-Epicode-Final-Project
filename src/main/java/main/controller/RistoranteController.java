@@ -7,6 +7,7 @@ import main.service.RistoranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class RistoranteController {
     private RistoranteService ristoranteService;
 
     @PostMapping("/create")
+    @PreAuthorize("")
     public ResponseEntity<Void> aggiungiRistorante(@RequestBody RistorantePayload ristorantePayload) {
         ristoranteService.inserisciRistorante(ristorantePayload);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -73,11 +75,6 @@ public class RistoranteController {
         }
     }
 
-    @GetMapping("/cerca")
-    public ResponseEntity<List<Ristorante>> searchRestaurants(@RequestParam(value = "perStringa") String value) {
-        List<Ristorante> ristorantes = ristoranteService.searchByTipoCucinaOrNomeRistorante(value);
-        return new ResponseEntity<>(ristorantes, HttpStatus.OK);
-    }
 
     @GetMapping("/luogo/citta/{citta}")
     public ResponseEntity<List<Ristorante>> getRistoranteByCitta(@PathVariable String citta){
@@ -87,16 +84,34 @@ public class RistoranteController {
 
 
 
-//    @GetMapping("/restaurants")
-//    public ResponseEntity<List<Ristorante>> searchRestaurants(@RequestParam(value = "citta", required = false) String city,
-//                                                              @RequestParam(value = "nomeRistornate", required = false) String restaurantName) {
-//        List<Ristorante> response = ristoranteService.searchRestaurants(city, restaurantName);
-//        if (response.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
+    @GetMapping("/?citta=NomeCitta&tipoCucina=italiana")
+    public ResponseEntity<List<Ristorante>> ricercaRistoranti(
+            @RequestParam(required = true) String citta,
+            @RequestParam(required = false) TipoCucina tipoCucina,
+            @RequestParam(required = false) String nomeRistorante
+    ) {
+        List<Ristorante> ristoranti = ristoranteService.ricercaRistoranti(citta, tipoCucina, nomeRistorante);
+
+        if (ristoranti.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(ristoranti);
+    }
+
+
+
+
+    @GetMapping("/cerca")
+    public ResponseEntity<List<Ristorante>> searchRestaurants(@RequestParam(value = "perStringa") String value) {
+        List<Ristorante> ristorantes = ristoranteService.searchByTipoCucinaOrNomeRistorante(value);
+        return new ResponseEntity<>(ristorantes, HttpStatus.OK);
+    }
+
+
+
+
+
 
 }
 

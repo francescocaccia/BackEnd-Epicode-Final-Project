@@ -32,6 +32,8 @@ public class RistoranteService {
     private MenuRepository menuRepository;
     @Autowired
     private PiattoRepository piattoRepository;
+    @Autowired
+    private ClienteService clienteService;
 
     public void inserisciRistorante(RistorantePayload ristorantePayload) {
         // Verifica se esiste già un ristorante con lo stesso luogo
@@ -48,7 +50,7 @@ public class RistoranteService {
         ristorante.setNomeRistorante(ristorantePayload.getNomeRistorante());
         ristorante.setTotaleCoperti(ristorantePayload.getTotaleCoperti());
         ristorante.setTipoCucina(ristorantePayload.getTipoCucina());
-
+        ristorante.setProprietario(clienteService.findByEmail(ristorantePayload.getEmailProprietario()));
         Menu nuovoMenu = new Menu();
         List<PiattoPayload> piattiPayloadList = ristorantePayload.getMenu().getPiatti();
         List<Piatto> piattoEntityList = new ArrayList<>();
@@ -137,27 +139,23 @@ public class RistoranteService {
         }
         return new ArrayList<>();
     }
+    public List<Ristorante> ricercaRistoranti(String citta, TipoCucina tipoCucina, String nomeRistorante) {
+        if (tipoCucina != null && nomeRistorante != null) {
+            // Caso in cui entrambi i parametri tipoCucina e nomeRistorante sono specificati
+            return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCaseAndTipoCucinaAndNomeRistoranteStartingWithIgnoreCase(citta, tipoCucina, nomeRistorante);
+        } else if (tipoCucina != null) {
+            // Caso in cui è specificato solo il parametro tipoCucina
+            return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCaseAndTipoCucina(citta, tipoCucina);
+        } else if (nomeRistorante != null) {
+            // Caso in cui è specificato solo il parametro nomeRistorante
+            return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCaseAndNomeRistoranteStartingWithIgnoreCase(citta, nomeRistorante);
+        } else {
+            // Caso in cui nessuno dei due parametri opzionali è specificato
+            return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCase(citta);
+        }
+    }
 
-//    public List<Ristorante> searchRestaurants(String citta, String restaurantName) {
-//        if (citta != null && restaurantName != null) {
-//            // Ricerca per entrambi i criteri: city e restaurantName
-//            return ristoranteRepository.findByLuogoAndNomeRistorante(citta, restaurantName);
-//        } else if (citta != null) {
-//            // Ricerca per city
-//            return ristoranteRepository.findByLuogoAndNomeRistorante( citta, "");
-//        } else if (restaurantName != null) {
-//            // Ricerca per restaurantName
-//            return (List<Ristorante>) ristoranteRepository.findByNomeRistorante(restaurantName);
-//        } else {
-//            // Nessun criterio di ricerca specificato, restituisce tutti i ristoranti
-//            return ristoranteRepository.findAll();
-//        }
-//    }
-//}
 
-//    public List<Ristorante> getByCityAndName(String city, String name) {
-//        return ristoranteRepository.findByLuogoCittaAndNomeRistoranteContainingIgnoreCase(city, name);
-//    }
 
 
 }
