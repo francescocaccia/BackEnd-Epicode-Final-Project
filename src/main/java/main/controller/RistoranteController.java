@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static main.enums.Role.ADMIN;
+
 @RestController
 @RequestMapping("/ristoranti")
 public class RistoranteController {
@@ -21,7 +23,7 @@ public class RistoranteController {
     private RistoranteService ristoranteService;
 
     @PostMapping("/create")
-    @PreAuthorize("")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Void> aggiungiRistorante(@RequestBody RistorantePayload ristorantePayload) {
         ristoranteService.inserisciRistorante(ristorantePayload);
         return new ResponseEntity<>(HttpStatus.CREATED);

@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -46,16 +47,16 @@ public class Cliente implements UserDetails {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "idRecensione")
-    private List<Recensione> recensioni;
+    private List<Recensione> recensioni= new ArrayList<>();
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "idPrenotazione")
-    private List<Prenotazione> prenotazioni;
+    private List<Prenotazione> prenotazioni= new ArrayList<>();
 
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ristorante di proprietario")
-    private Ristorante ristoranteDiProprietario;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idRistorante")
+    private List<Ristorante> listaRistoranti= new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -28,5 +28,6 @@ public class RistorantePayload {
     @NotNull(message = "almeno un'immagine è obbligatoria")
     private CardImmaginiPayload cardImmagini;
 
+    @NotBlank
     private String emailProprietario;
 }

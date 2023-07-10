@@ -50,7 +50,7 @@ public class Ristorante {
     @JoinColumn(name = "idCard")
     private CardImmagini cardImmagini;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "proprietario")
     private Cliente proprietario;
 }

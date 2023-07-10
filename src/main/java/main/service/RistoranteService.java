@@ -25,6 +25,8 @@ public class RistoranteService {
     @Autowired
     private RistoranteRepository ristoranteRepository;
     @Autowired
+    private ClienteRepository clienteRepository;
+    @Autowired
     private LuogoRepository luogoRepository;
     @Autowired
     private CardImmaginiRepository cardImmaginiRepository;
@@ -50,7 +52,8 @@ public class RistoranteService {
         ristorante.setNomeRistorante(ristorantePayload.getNomeRistorante());
         ristorante.setTotaleCoperti(ristorantePayload.getTotaleCoperti());
         ristorante.setTipoCucina(ristorantePayload.getTipoCucina());
-        ristorante.setProprietario(clienteService.findByEmail(ristorantePayload.getEmailProprietario()));
+        Cliente cliente = clienteService.findByEmail(ristorantePayload.getEmailProprietario());
+        ristorante.setProprietario(cliente);
         Menu nuovoMenu = new Menu();
         List<PiattoPayload> piattiPayloadList = ristorantePayload.getMenu().getPiatti();
         List<Piatto> piattoEntityList = new ArrayList<>();
@@ -88,6 +91,10 @@ public class RistoranteService {
         ristorante.setCardImmagini(cardImmagini);
 
         ristoranteRepository.save(ristorante);
+        cliente.getListaRistoranti().add(ristorante);
+        clienteRepository.save(cliente);
+
+
         log.info("ristorante inserito correttamente" + ristorante);
     }
 
