@@ -2,10 +2,10 @@ package main.controller;
 
 import main.entities.Cliente;
 import main.payload.ClientePayload;
+import main.payload.ClienteResponse;
 import main.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,15 +19,14 @@ public class ClienteController {
     private ClienteService clienteService;
 
 
-
     @GetMapping("/me")
 //    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public Cliente getCurrentUser() {
+    public ClienteResponse getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Cliente clienteLoggato = (Cliente) authentication.getPrincipal();
-        return  clienteLoggato;
+        ClienteResponse clienteResponse = ClienteResponse.creaResponse(clienteLoggato);
+        return clienteResponse;
     }
-
 
 
     @PostMapping("")

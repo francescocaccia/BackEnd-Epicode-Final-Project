@@ -1,6 +1,6 @@
 package main.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,16 +8,11 @@ import main.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
-@JsonIgnoreProperties({ "ristoranteDiProprietario"})
 @Entity
 @Table(name = "cliente")
 public class Cliente implements UserDetails {
@@ -45,18 +40,20 @@ public class Cliente implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @Column
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "idRecensione")
-    private List<Recensione> recensioni= new ArrayList<>();
+    private Set<Recensione> recensioni = new HashSet<>();
 
+    @Column
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "idPrenotazione")
-    private List<Prenotazione> prenotazioni= new ArrayList<>();
+    private Set<Prenotazione> prenotazioni = new HashSet<>();
 
-
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idRistorante")
-    private List<Ristorante> listaRistoranti= new ArrayList<>();
+//    @JsonIgnore
+    @Column
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente")
+    private final Set<Ristorante> ristoranti = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -92,6 +89,14 @@ public class Cliente implements UserDetails {
     public String getPassword() {
 
         return this.password;
+    }
+
+    public void addRestaurant(List<Ristorante> ristoranti) {
+        Optional.ofNullable(ristoranti)
+                .ifPresent(it -> {
+                    this.ristoranti.addAll(ristoranti);
+                    this.ristoranti.forEach(r -> r.setCliente(this));
+                });
     }
 
 //    public Collection<? extends GrantedAuthority> getAuthorities() {

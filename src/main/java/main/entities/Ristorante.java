@@ -1,6 +1,6 @@
 package main.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,6 +51,7 @@ public class Ristorante {
     private CardImmagini cardImmagini;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "proprietario")
-    private Cliente proprietario;
+    @JsonIgnore
+    @JoinColumn(name = "idCliente")
+    private Cliente cliente;
 }

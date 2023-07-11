@@ -12,10 +12,7 @@ import main.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Data
 @Service
@@ -53,7 +50,7 @@ public class RistoranteService {
         ristorante.setTotaleCoperti(ristorantePayload.getTotaleCoperti());
         ristorante.setTipoCucina(ristorantePayload.getTipoCucina());
         Cliente cliente = clienteService.findByEmail(ristorantePayload.getEmailProprietario());
-        ristorante.setProprietario(cliente);
+        ristorante.setCliente(cliente);
         Menu nuovoMenu = new Menu();
         List<PiattoPayload> piattiPayloadList = ristorantePayload.getMenu().getPiatti();
         List<Piatto> piattoEntityList = new ArrayList<>();
@@ -90,20 +87,23 @@ public class RistoranteService {
 
         ristorante.setCardImmagini(cardImmagini);
 
-        ristoranteRepository.save(ristorante);
-        cliente.getListaRistoranti().add(ristorante);
-        clienteRepository.save(cliente);
+        cliente.addRestaurant(List.of(ristorante));
+        clienteRepository.saveAndFlush(cliente);
 
+        ristoranteRepository.save(ristorante);
 
         log.info("ristorante inserito correttamente" + ristorante);
     }
 
 
     public void eliminaRistorante(Long id) {
+        log.info("tento di cancellare ristorante con id: " + id);
         Ristorante found = ristoranteRepository.findById(id)
+
                 .orElseThrow(() -> new RuntimeException("Ristorante non trovato"));
 
         ristoranteRepository.delete(found);
+        log.info("ristorante con id: " + id + " eliminato con successo");
     }
 
     public List<Ristorante> findAll() {
@@ -114,55 +114,32 @@ public class RistoranteService {
         return ristoranteRepository.findById(id);
     }
 
-    public List<Ristorante> getByTipoCucina(TipoCucina tipoCucina) {
-        return ristoranteRepository.findByTipoCucina(tipoCucina);
-    }
 
 
-    public List<Ristorante> findRistoranteByNomeRistorante(String nomeRistorante) {
-        return ristoranteRepository.findByNomeRistoranteStartingWithIgnoreCase(nomeRistorante);
-    }
-
-    public List<Ristorante> findRistorantiByTipoCucina(TipoCucina tipoCucina) {
-        return ristoranteRepository.findByTipoCucina(tipoCucina);
-    }
-
-    public List<Ristorante> findByLuogo(String luogoNome) {
-        return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCase(luogoNome);
+    public List<Ristorante> findByCitta(String citta) {
+        return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCase(citta);
     }
 
 
     public List<Ristorante> searchByTipoCucinaOrNomeRistorante(String value) {
         TipoCucina[] allPossibleTipoCucina = TipoCucina.values();
+
         boolean anyMatch = Arrays.stream(allPossibleTipoCucina)
                 .anyMatch(tipoCucina -> tipoCucina.name().equalsIgnoreCase(value));
         if (anyMatch) {
             return ristoranteRepository.findByTipoCucina(TipoCucina.valueOf(value));
         } else {
-            Optional<Ristorante> ristoranteOptional = ristoranteRepository.findByNomeRistorante(value);
+            Optional<Ristorante> ristoranteOptional = ristoranteRepository.findByNomeRistoranteStartingWithIgnoreCase(value);
             if (ristoranteOptional.isPresent()) {
                 return List.of(ristoranteOptional.get());
             }
         }
         return new ArrayList<>();
     }
-    public List<Ristorante> ricercaRistoranti(String citta, TipoCucina tipoCucina, String nomeRistorante) {
-        if (tipoCucina != null && nomeRistorante != null) {
-            // Caso in cui entrambi i parametri tipoCucina e nomeRistorante sono specificati
-            return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCaseAndTipoCucinaAndNomeRistoranteStartingWithIgnoreCase(citta, tipoCucina, nomeRistorante);
-        } else if (tipoCucina != null) {
-            // Caso in cui è specificato solo il parametro tipoCucina
-            return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCaseAndTipoCucina(citta, tipoCucina);
-        } else if (nomeRistorante != null) {
-            // Caso in cui è specificato solo il parametro nomeRistorante
-            return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCaseAndNomeRistoranteStartingWithIgnoreCase(citta, nomeRistorante);
-        } else {
-            // Caso in cui nessuno dei due parametri opzionali è specificato
-            return ristoranteRepository.findByLuogo_CittaStartingWithIgnoreCase(citta);
-        }
+
+
+    public List<Ristorante> searchByTipoCucinaOrNameRestaurantAndCity(String cucinaRistorante, String citta) {
+        return searchByTipoCucinaOrNomeRistorante(cucinaRistorante).stream().filter(element -> element.getLuogo().getCitta().equals(citta)).toList();
     }
-
-
-
 
 }
