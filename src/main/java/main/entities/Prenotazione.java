@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Time;
 import java.util.Date;
 
 @Getter
@@ -19,6 +20,9 @@ public class Prenotazione {
     @Column(nullable = false)
     private Date dataPrenotazione;
 
+    @Column(nullable = false)
+    private Time orarioPrenotazione;
+
     @Column
     private int numeroPersone;
 
@@ -33,6 +37,7 @@ public class Prenotazione {
 
     public Prenotazione(Cliente cliente, Ristorante ristorante, Date date, int numeroPersone) {
     }
+
 
 
 }

@@ -13,6 +13,7 @@ public class PrenotazionePayload {
     @NotNull(message = "La data della prenotazione è obbligatoria")
     private String dataPrenotazione;
 
+
     @Positive
     private int numeroPersone;
 
