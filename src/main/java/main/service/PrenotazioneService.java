@@ -3,6 +3,7 @@ package main.service;
 import main.entities.Cliente;
 import main.entities.Prenotazione;
 import main.entities.Ristorante;
+import main.payload.PrenotazionePayload;
 import main.repository.ClienteRepository;
 import main.repository.PrenotazioneRepository;
 import main.repository.RistoranteRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,28 +25,47 @@ public class PrenotazioneService {
     @Autowired
     private PrenotazioneRepository prenotazioneRepository;
 
-    public void prenotaRistorante(Long clienteId, Long ristoranteId, int numeroPersone, Date data) {
-        // Verifica se il cliente esiste
-        Optional<Cliente> clienteOptional = clienteRepository.findById(clienteId);
+    public void prenotaRistorante(PrenotazionePayload prenotazionePayload) {
+        Optional<Cliente> clienteOptional = clienteRepository.findById(prenotazionePayload.getIdCliente());
+
         if (clienteOptional.isEmpty()) {
             throw new RuntimeException("Cliente non trovato.");
         }
         Cliente cliente = clienteOptional.get();
 
+        Optional<Prenotazione> pi = cliente.getPrenotazioni().stream().filter( p -> p.getDataPrenotazione().getTime()== prenotazionePayload.getDataPrenotazione().getTime()).findAny();
+
+        if(pi.isPresent() ){
+            throw  new RuntimeException("hai gia una prenotazione a questo orario");
+        }
+
+
         // Verifica se il ristorante esiste
-        Optional<Ristorante> ristoranteOptional = ristoranteRepository.findById(ristoranteId);
+        Optional<Ristorante> ristoranteOptional = ristoranteRepository.findById(prenotazionePayload.getIdRistorante());
         if (ristoranteOptional.isEmpty()) {
             throw new RuntimeException("Ristorante non trovato.");
         }
         Ristorante ristorante = ristoranteOptional.get();
+        // Verifica se il ristorante ha i coperti necessari
+        int sum = ristorante.getPrenotazioni().stream().mapToInt(p -> p.getNumeroPersone()).sum();
+
+        if (sum + prenotazionePayload.getNumeroPersone() > ristorante.getTotaleCoperti()){
+            throw new RuntimeException("numero posti non disponibili");
+        }
 
         // Effettua la prenotazione
-        Prenotazione prenotazione = new Prenotazione(cliente, ristorante, new Date(),numeroPersone);
+        Prenotazione prenotazione = new Prenotazione();
+        prenotazione.setDataPrenotazione(prenotazionePayload.getDataPrenotazione());
+        prenotazione.setNumeroPersone(prenotazionePayload.getNumeroPersone());
+        prenotazione.setCliente(cliente);
+        prenotazione.setRistorante(ristorante);
         prenotazioneRepository.save(prenotazione);
 
         // Aggiorna le associazioni tra cliente e prenotazione
-        cliente.getPrenotazioni().add(prenotazione);
+        cliente.addPrenotazioni(List.of(prenotazione));
         clienteRepository.save(cliente);
+        ristorante.addPrenotazioni(List.of(prenotazione));
+        ristoranteRepository.save(ristorante);
     }
 
 

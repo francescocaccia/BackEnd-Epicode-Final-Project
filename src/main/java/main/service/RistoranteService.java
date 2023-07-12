@@ -129,12 +129,10 @@ public class RistoranteService {
         if (anyMatch) {
             return ristoranteRepository.findByTipoCucina(TipoCucina.valueOf(value));
         } else {
-            Optional<Ristorante> ristoranteOptional = ristoranteRepository.findByNomeRistoranteStartingWithIgnoreCase(value);
-            if (ristoranteOptional.isPresent()) {
-                return List.of(ristoranteOptional.get());
-            }
+           return ristoranteRepository.findByNomeRistoranteStartingWithIgnoreCase(value);
+
         }
-        return new ArrayList<>();
+      
     }
 
 

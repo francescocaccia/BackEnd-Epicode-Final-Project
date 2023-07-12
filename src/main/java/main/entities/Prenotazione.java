@@ -20,9 +20,6 @@ public class Prenotazione {
     @Column(nullable = false)
     private Date dataPrenotazione;
 
-    @Column(nullable = false)
-    private Time orarioPrenotazione;
-
     @Column
     private int numeroPersone;
 
@@ -33,10 +30,6 @@ public class Prenotazione {
     @ManyToOne
     @JoinColumn(name = "idRistorante")
     private Ristorante ristorante;
-
-
-    public Prenotazione(Cliente cliente, Ristorante ristorante, Date date, int numeroPersone) {
-    }
 
 
 

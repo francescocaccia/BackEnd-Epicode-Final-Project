@@ -7,7 +7,10 @@ import lombok.Setter;
 import lombok.ToString;
 import main.enums.TipoCucina;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -44,7 +47,7 @@ public class Ristorante {
 
     @OneToMany
     @JoinColumn(name = "idPrenotazione")
-    private List<Prenotazione> prenotazioni;
+    private Set<Prenotazione> prenotazioni = new HashSet<>();
 
     @OneToOne
     @JoinColumn(name = "idCard")
@@ -54,4 +57,14 @@ public class Ristorante {
     @JsonIgnore
     @JoinColumn(name = "idCliente")
     private Cliente cliente;
+
+
+
+    public void addPrenotazioni (List<Prenotazione> prenotazioni){
+        Optional.ofNullable(prenotazioni)
+                .ifPresent(it ->{
+                    this.prenotazioni.addAll(prenotazioni);
+                    this.prenotazioni.forEach(p -> p.setRistorante(this));
+                });
+    }
 }

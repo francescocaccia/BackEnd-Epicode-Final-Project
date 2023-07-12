@@ -99,6 +99,14 @@ public class Cliente implements UserDetails {
                 });
     }
 
+    public void addPrenotazioni (List<Prenotazione> prenotazioni){
+        Optional.ofNullable(prenotazioni)
+                .ifPresent(it ->{
+                    this.prenotazioni.addAll(prenotazioni);
+                    this.prenotazioni.forEach(p -> p.setCliente(this));
+                });
+    }
+
 //    public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return List.of(new SimpleGrantedAuthority(role.name()));
 //    }

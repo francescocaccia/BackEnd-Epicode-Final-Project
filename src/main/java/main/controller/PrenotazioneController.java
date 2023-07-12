@@ -1,5 +1,6 @@
 package main.controller;
 
+import main.payload.PrenotazionePayload;
 import main.repository.RistoranteRepository;
 import main.service.PrenotazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,10 @@ public class PrenotazioneController {
     @Autowired
     private RistoranteRepository ristoranteRepository;
 
-    @PostMapping("/prenota/{clienteId}/{ristoranteId}")
-    public ResponseEntity<String> prenotaRistorante(@PathVariable("clienteId") Long clienteId, @PathVariable("ristoranteId") Long ristoranteId, @RequestParam("numeroPersone") int numeroPersone, @RequestParam("data") @DateTimeFormat(pattern = "dd-MM-yyyy") Date data) {
+    @PostMapping("/prenota")
+    public ResponseEntity<String> prenotaRistorante(@RequestBody PrenotazionePayload prenotazionePayload) {
         try {
-            prenotazioneService.prenotaRistorante(clienteId, ristoranteId, numeroPersone, data);
+            prenotazioneService.prenotaRistorante(prenotazionePayload);
             return new ResponseEntity<>("Prenotazione effettuata con successo.", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

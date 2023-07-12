@@ -18,7 +18,7 @@ public interface RistoranteRepository extends JpaRepository<Ristorante, Long> {
 
     List<Ristorante> findByTipoCucina(TipoCucina tipoCucina);
 
-    Optional<Ristorante> findByNomeRistoranteStartingWithIgnoreCase(String nomeRistornate);
+    List <Ristorante> findByNomeRistoranteStartingWithIgnoreCase(String nomeRistornate);
 
 
 
