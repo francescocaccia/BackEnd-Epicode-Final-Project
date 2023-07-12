@@ -27,17 +27,17 @@ public class PrenotazioneController {
             prenotazioneService.prenotaRistorante(prenotazionePayload);
             return new ResponseEntity<>("Prenotazione effettuata con successo.", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/modifica/{clienteId}/{prenotazioneId}")
-    public ResponseEntity<String> modificaPrenotazione(@PathVariable("clienteId") Long clienteId, @PathVariable("prenotazioneId") Long prenotazioneId, @RequestParam("numeroPersone") int nuovoNumeroPersone, @RequestParam("data") @DateTimeFormat(pattern = "dd-MM-yyyy") Date nuovaData) {
+    @PutMapping("/modifica/{prenotazioneId}")
+    public ResponseEntity<String> modificaPrenotazione(@RequestBody PrenotazionePayload prenotazionePayload,@PathVariable Long prenotazioneId) {
         try {
-            prenotazioneService.modificaPrenotazione(clienteId, prenotazioneId, nuovoNumeroPersone, nuovaData);
-            return new ResponseEntity<>("Prenotazione modificata con successo.", HttpStatus.OK);
+            prenotazioneService.modificaPrenotazione(prenotazionePayload, prenotazioneId);
+            return new ResponseEntity<>("Prenotazione modificata con successo.", HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -46,9 +46,9 @@ public class PrenotazioneController {
     public ResponseEntity<String> eliminaPrenotazione(@PathVariable("clienteId") Long clienteId, @PathVariable("prenotazioneId") Long prenotazioneId) {
         try {
             prenotazioneService.eliminaPrenotazione(clienteId, prenotazioneId);
-            return new ResponseEntity<>("Prenotazione eliminata con successo.", HttpStatus.OK);
+            return new ResponseEntity<>("Prenotazione eliminata con successo.", HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -32,5 +32,4 @@ public class Prenotazione {
     private Ristorante ristorante;
 
 
-
 }

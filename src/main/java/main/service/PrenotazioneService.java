@@ -1,5 +1,7 @@
 package main.service;
 
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import main.entities.Cliente;
 import main.entities.Prenotazione;
 import main.entities.Ristorante;
@@ -10,12 +12,15 @@ import main.repository.RistoranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class PrenotazioneService {
 
     @Autowired
@@ -33,10 +38,10 @@ public class PrenotazioneService {
         }
         Cliente cliente = clienteOptional.get();
 
-        Optional<Prenotazione> pi = cliente.getPrenotazioni().stream().filter( p -> p.getDataPrenotazione().getTime()== prenotazionePayload.getDataPrenotazione().getTime()).findAny();
+        Optional<Prenotazione> pi = cliente.getPrenotazioni().stream().filter(p -> p.getDataPrenotazione().getTime() == prenotazionePayload.getDataPrenotazione().getTime()).findAny();
 
-        if(pi.isPresent() ){
-            throw  new RuntimeException("hai gia una prenotazione a questo orario");
+        if (pi.isPresent()) {
+            throw new RuntimeException("hai gia una prenotazione a questo orario");
         }
 
 
@@ -49,7 +54,7 @@ public class PrenotazioneService {
         // Verifica se il ristorante ha i coperti necessari
         int sum = ristorante.getPrenotazioni().stream().mapToInt(p -> p.getNumeroPersone()).sum();
 
-        if (sum + prenotazionePayload.getNumeroPersone() > ristorante.getTotaleCoperti()){
+        if (sum + prenotazionePayload.getNumeroPersone() > ristorante.getTotaleCoperti()) {
             throw new RuntimeException("numero posti non disponibili");
         }
 
@@ -72,55 +77,48 @@ public class PrenotazioneService {
     public void eliminaPrenotazione(Long clienteId, Long prenotazioneId) {
         // Verifica se il cliente esiste
         Optional<Cliente> clienteOptional = clienteRepository.findById(clienteId);
+        log.info("cerco di eliminare la prenotazione tramite id" + prenotazioneId);
         if (clienteOptional.isEmpty()) {
             throw new RuntimeException("Cliente non trovato.");
         }
         Cliente cliente = clienteOptional.get();
-
-        // Verifica se la prenotazione esiste
-        Optional<Prenotazione> prenotazioneOptional = prenotazioneRepository.findById(prenotazioneId);
-        if (prenotazioneOptional.isEmpty()) {
-            throw new RuntimeException("Prenotazione non trovata.");
-        }
-        Prenotazione prenotazione = prenotazioneOptional.get();
-
-        // Verifica se la prenotazione appartiene al cliente
-        if (!cliente.getPrenotazioni().contains(prenotazione)) {
-            throw new RuntimeException("La prenotazione non appartiene al cliente.");
-        }
+        Optional<Prenotazione> prenotazione = cliente.getPrenotazioni().stream().filter(p -> Objects.equals(p.getIdPrenotazione(), prenotazioneId)).findAny();
 
         // Rimuovi la prenotazione
-        prenotazioneRepository.delete(prenotazione);
+        if (prenotazione.isPresent()) {
+            Prenotazione prenotazioneDelete = prenotazione.get();
+            prenotazioneRepository.delete(prenotazioneDelete);
+            log.info("prenotazione eliminata ");
+        }
     }
 
-    public void modificaPrenotazione(Long clienteId, Long prenotazioneId, int nuovoNumeroPersone, Date nuovaData) {
-        // Verifica se il cliente esiste
-        Optional<Cliente> clienteOptional = clienteRepository.findById(clienteId);
+    public void modificaPrenotazione(PrenotazionePayload prenotazionePayload, Long idPrenotazione) {
+        // Verifica se il cliente esiste (per sicurezza)
+        Optional<Cliente> clienteOptional = clienteRepository.findById(prenotazionePayload.getIdCliente());
         if (clienteOptional.isEmpty()) {
             throw new RuntimeException("Cliente non trovato.");
         }
         Cliente cliente = clienteOptional.get();
 
-        // Verifica se la prenotazione esiste
-        Optional<Prenotazione> prenotazioneOptional = prenotazioneRepository.findById(prenotazioneId);
-        if (prenotazioneOptional.isEmpty()) {
-            throw new RuntimeException("Prenotazione non trovata.");
+        Optional<Prenotazione> prenotazione = cliente.getPrenotazioni().stream().filter(p -> Objects.equals(p.getIdPrenotazione(), idPrenotazione)).findAny();
+        if (prenotazione.isPresent()) {
+            Prenotazione pi = prenotazione.get();
+            int vecchiaPrenotazione = pi.getNumeroPersone();
+            pi.setDataPrenotazione(prenotazionePayload.getDataPrenotazione());
+            Optional<Ristorante> ristorante = ristoranteRepository.findById(prenotazionePayload.getIdRistorante());
+            if (ristorante.isPresent()) {
+                Ristorante ri = ristorante.get();
+                int sum = ri.getPrenotazioni().stream().mapToInt(p -> p.getNumeroPersone()).sum();
+
+                int differenzaTraPrenotazioni = sum - vecchiaPrenotazione;
+
+                if (prenotazionePayload.getNumeroPersone() <= differenzaTraPrenotazioni) {
+                    pi.setNumeroPersone(prenotazionePayload.getNumeroPersone());
+                } else {
+                    throw new RuntimeException("il numero di posti selezionato non è disponibile");
+                }
+
+            }
         }
-        Prenotazione prenotazione = prenotazioneOptional.get();
-
-        // Verifica se la prenotazione appartiene al cliente
-        if (!cliente.getPrenotazioni().contains(prenotazione)) {
-            throw new RuntimeException("La prenotazione non appartiene al cliente.");
-        }
-
-        // Aggiorna il numero di persone della prenotazione
-        prenotazione.setNumeroPersone(nuovoNumeroPersone);
-
-        // Imposta la nuova data
-        prenotazione.setDataPrenotazione(nuovaData);
-
-        prenotazioneRepository.save(prenotazione);
     }
-
-
 }

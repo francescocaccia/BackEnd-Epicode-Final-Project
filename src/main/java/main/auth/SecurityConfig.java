@@ -35,7 +35,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/luogo/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/tipo-cucina/**").permitAll());
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/luogo/citta/{citta}").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/luogo/citta/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/luogo/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("ristoranti/luogo/citta/**").permitAll());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/nome/{nomeRistorante}").permitAll());//testato,senza questo non funziona

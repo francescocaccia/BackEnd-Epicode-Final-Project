@@ -45,8 +45,8 @@ public class Ristorante {
     @JoinColumn(name = "idLuogo")
     private Luogo luogo;
 
-    @OneToMany
-    @JoinColumn(name = "idPrenotazione")
+    @OneToMany(mappedBy = "ristorante")
+    @JsonIgnore
     private Set<Prenotazione> prenotazioni = new HashSet<>();
 
     @OneToOne

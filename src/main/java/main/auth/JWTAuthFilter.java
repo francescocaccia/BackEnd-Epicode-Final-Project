@@ -75,7 +75,6 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                 "/ristoranti/citta/complete/**",
                 "/luogo/citta/**",
                 "/ristoranti/tipo-cucina/**",
-                "/ristoranti?citta=NomeCitta&tipoCucina=italiana/**",
                 "/ristoranti/luogo/citta/**",
                 "/ristoranti/nome/**",
                 "/ristoranti/tipoCucina/**",
