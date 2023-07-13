@@ -77,7 +77,7 @@ public class PrenotazioneService {
     public void eliminaPrenotazione(Long clienteId, Long prenotazioneId) {
         // Verifica se il cliente esiste
         Optional<Cliente> clienteOptional = clienteRepository.findById(clienteId);
-        log.info("cerco di eliminare la prenotazione tramite id" + prenotazioneId);
+        log.info("cerco di eliminare la prenotazione tramite id " + prenotazioneId);
         if (clienteOptional.isEmpty()) {
             throw new RuntimeException("Cliente non trovato.");
         }
@@ -112,8 +112,11 @@ public class PrenotazioneService {
 
                 int differenzaTraPrenotazioni = sum - vecchiaPrenotazione;
 
-                if (prenotazionePayload.getNumeroPersone() <= differenzaTraPrenotazioni) {
+                if (prenotazionePayload.getNumeroPersone() <= (ri.getTotaleCoperti() - differenzaTraPrenotazioni) ) {
+
                     pi.setNumeroPersone(prenotazionePayload.getNumeroPersone());
+                    prenotazioneRepository.save(pi);
+
                 } else {
                     throw new RuntimeException("il numero di posti selezionato non è disponibile");
                 }

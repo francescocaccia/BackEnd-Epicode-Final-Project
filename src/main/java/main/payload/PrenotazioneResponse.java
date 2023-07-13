@@ -14,4 +14,6 @@ public class PrenotazioneResponse {
     private int numeroPersone;
 
     private String nomeRistorante;
+
+    private  Long idRistorante;
 }

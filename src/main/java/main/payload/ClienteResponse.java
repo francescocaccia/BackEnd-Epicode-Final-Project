@@ -27,7 +27,7 @@ public class ClienteResponse {
         clienteResponse.setNumeroTelefono(cliente.getNumeroTelefono());
         clienteResponse.setRole(cliente.getRole());
         List<RistoranteResponse> list = cliente.getRistoranti().stream().map(ristorante -> new RistoranteResponse(ristorante.getIdRistorante(), ristorante.getNomeRistorante())).toList();
-        List<PrenotazioneResponse> listaP = cliente.getPrenotazioni().stream().map(prenotazione -> new PrenotazioneResponse(prenotazione.getIdPrenotazione(), prenotazione.getDataPrenotazione(), prenotazione.getNumeroPersone(), prenotazione.getRistorante().getNomeRistorante())).toList();
+        List<PrenotazioneResponse> listaP = cliente.getPrenotazioni().stream().map(prenotazione -> new PrenotazioneResponse(prenotazione.getIdPrenotazione(), prenotazione.getDataPrenotazione(), prenotazione.getNumeroPersone(), prenotazione.getRistorante().getNomeRistorante(), prenotazione.getRistorante().getIdRistorante() )).toList();
         clienteResponse.setRistorante(list);
         clienteResponse.setPrenotazioni(listaP);
         return clienteResponse;

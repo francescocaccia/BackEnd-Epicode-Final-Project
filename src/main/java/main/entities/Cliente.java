@@ -46,8 +46,7 @@ public class Cliente implements UserDetails {
     private Set<Recensione> recensioni = new HashSet<>();
 
     @Column
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idPrenotazione")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente")
     private Set<Prenotazione> prenotazioni = new HashSet<>();
 
 //    @JsonIgnore
