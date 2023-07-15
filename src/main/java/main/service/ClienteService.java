@@ -77,25 +77,23 @@ public class ClienteService {
     }
 
 
-    public Cliente clienteLogin(String email, String password) {
-
-        Optional<Cliente> cliente = clienteRepository.findByEmailAndPassword(email, password);
-
-        if (cliente.isPresent()) {
-            return cliente.get();
-        } else {
-            throw new RuntimeException("le credenziali inserite sono errate");
-        }
-
-    }
-
-
     public Cliente findByEmail(String email) {
         Optional<Cliente> cliente = clienteRepository.findByEmail(email);
         if (cliente.isPresent()) {
             return cliente.get();
         } else {
             throw new ClienteNotFoundException("Cliente non trovato per l'email: " + email);
+        }
+    }
+
+
+    public Cliente findById (Long id){
+
+        Optional<Cliente> cliente = clienteRepository.findById(id);
+        if(cliente.isPresent()) {
+            return cliente.get();
+        }else {
+            throw new ClienteNotFoundException("Cliente con questo id non trovato " + id);
         }
     }
 

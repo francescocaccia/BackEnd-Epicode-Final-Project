@@ -41,15 +41,14 @@ public class Cliente implements UserDetails {
     private Role role;
 
     @Column
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idRecensione")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente")
     private Set<Recensione> recensioni = new HashSet<>();
 
     @Column
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente")
     private Set<Prenotazione> prenotazioni = new HashSet<>();
 
-//    @JsonIgnore
+
     @Column
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente")
     private final Set<Ristorante> ristoranti = new HashSet<>();
@@ -106,7 +105,13 @@ public class Cliente implements UserDetails {
                 });
     }
 
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of(new SimpleGrantedAuthority(role.name()));
-//    }
+    public void addRecensioni (List<Recensione> recensioni){
+
+        Optional.ofNullable(recensioni)
+                .ifPresent(it ->{
+                    this.recensioni.addAll(recensioni);
+                    this.recensioni.forEach(p -> p.setCliente(this));
+                });
+
+    }
 }

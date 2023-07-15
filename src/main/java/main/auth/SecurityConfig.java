@@ -44,6 +44,7 @@ public class SecurityConfig {
 //        AUTORIZZAZIONE+++++++++++
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/cliente/**").authenticated());
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/prenotazione/**").authenticated());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/recensioni/**").authenticated());
 //       http.authorizeHttpRequests(auth -> auth.requestMatchers("/ristoranti/**").authenticated());
 
 

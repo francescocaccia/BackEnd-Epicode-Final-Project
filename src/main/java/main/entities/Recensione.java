@@ -20,18 +20,14 @@ public class Recensione {
     @Column
     private int numeroStelle;
 
-    @Column
-    private String titoloRecensione;
 
     @Column
     private String contenutoRecensione;
 
     @ManyToOne
     @JoinColumn(name = "idCliente")
-    private Cliente nomeAutore;
+    private Cliente cliente;
 
-    @Column
-    private Date dataRecensione;
 
     @ManyToOne
     @JoinColumn(name = "idRistorante")

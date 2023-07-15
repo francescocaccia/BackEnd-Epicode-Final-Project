@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Data
+
 @Service
 @Slf4j
 public class RistoranteService {

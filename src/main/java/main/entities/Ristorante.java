@@ -29,9 +29,8 @@ public class Ristorante {
     @Column(nullable = false)
     private int totaleCoperti;
 
-    @OneToMany
-    @JoinColumn(name = "idRecensione")
-    private List<Recensione> recensione;
+    @OneToMany(mappedBy = "ristorante")
+    private Set<Recensione> recensione = new HashSet<>();
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -65,6 +64,16 @@ public class Ristorante {
                 .ifPresent(it ->{
                     this.prenotazioni.addAll(prenotazioni);
                     this.prenotazioni.forEach(p -> p.setRistorante(this));
+                });
+    }
+
+
+    public void addRecensioni (List<Recensione> recensioni){
+
+        Optional.ofNullable(recensioni)
+                .ifPresent(it ->{
+                    this.recensione.addAll(recensioni);
+                    this.recensione.forEach(p -> p.setRistorante(this));
                 });
     }
 }
