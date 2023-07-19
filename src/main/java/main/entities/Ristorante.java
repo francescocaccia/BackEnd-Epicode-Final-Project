@@ -30,6 +30,7 @@ public class Ristorante {
     private int totaleCoperti;
 
     @OneToMany(mappedBy = "ristorante")
+//    @JsonIgnore
     private Set<Recensione> recensione = new HashSet<>();
 
     @Column(nullable = false)

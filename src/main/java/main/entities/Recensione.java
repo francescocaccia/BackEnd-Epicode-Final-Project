@@ -1,6 +1,7 @@
 package main.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,11 +26,13 @@ public class Recensione {
     private String contenutoRecensione;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "idCliente")
     private Cliente cliente;
 
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "idRistorante")
     private Ristorante ristorante;
 

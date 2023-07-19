@@ -3,6 +3,7 @@ package main.service;
 import main.entities.Cliente;
 import main.entities.Recensione;
 import main.entities.Ristorante;
+import main.exception.NotFoundException;
 import main.payload.RecensionePayload;
 import main.repository.ClienteRepository;
 import main.repository.RecensioneRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class RecensioneService {
@@ -83,4 +85,15 @@ public class RecensioneService {
 
     }
 
+
+    public Set<Recensione> getRecensioniByRistoranteId(Long idRistorante) {
+       Ristorante r = ristoranteService.getById(idRistorante).orElseThrow(() -> new NotFoundException("ristorante non trovato"));
+
+        return r.getRecensione();
+    }
+
+
+    public List<Recensione> getRecensioniByClienteId(Long idCliente){
+        return recensioneRepository.findAllByUtenteId(idCliente);
+    }
 }

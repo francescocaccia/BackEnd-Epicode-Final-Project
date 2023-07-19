@@ -70,6 +70,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         String[] freeEndpoints = {
                 "/ristoranti/cerca/**",
                 "ristoranti/**",
+                "/recensioni/search/**",
                 "/auth/**",
                 "/luogo/**",
                 "/ristoranti/citta/complete/**",
